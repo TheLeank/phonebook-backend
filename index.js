@@ -1,11 +1,11 @@
 const express = require('express')
-// Guardamos morgan
 const morgan = require('morgan')
 const app = express()
 app.use(express.json())
-// Y le decimos a app, que es express, que lo use con config 'tiny'
-// Ahora, automáticamente las peticiones se guardarán en consola
-app.use(morgan('tiny'))
+// Creo el token body, que devuelve el body de la request en forma de json
+morgan.token('body', function(req, res) {return JSON.stringify(req.body)})
+// Y lo añado al formato
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
     { 
