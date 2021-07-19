@@ -7,3 +7,7 @@ $ npm init
 $ npm install express 
 
 $ npm install --save-dev nodemon
+
+## ejercicio 3.7
+
+$ npm install morgan

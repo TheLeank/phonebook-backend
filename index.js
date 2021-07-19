@@ -1,7 +1,11 @@
 const express = require('express')
+// Guardamos morgan
+const morgan = require('morgan')
 const app = express()
-
 app.use(express.json())
+// Y le decimos a app, que es express, que lo use con config 'tiny'
+// Ahora, automáticamente las peticiones se guardarán en consola
+app.use(morgan('tiny'))
 
 let persons = [
     { 
