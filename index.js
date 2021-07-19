@@ -1,10 +1,13 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
+
 const app = express()
+
 app.use(express.json())
-// Creo el token body, que devuelve el body de la request en forma de json
+app.use(cors())
+
 morgan.token('body', function(req, res) {return JSON.stringify(req.body)})
-// Y lo añado al formato
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
