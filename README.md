@@ -12,6 +12,10 @@ $ npm install --save-dev nodemon
 
 $ npm install morgan
 
-## Part 3B
+## Parte 3B
 
 $ npm install cors
+
+## Parte 3C
+
+$ npm install mongoose
