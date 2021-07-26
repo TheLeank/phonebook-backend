@@ -12,4 +12,4 @@ DELETE http://localhost:3001/api/persons/4
 
 ###
 
-GET https://hidden-fjord-08547.herokuapp.com:3001/api/persons
+GET https://hidden-fjord-08547.herokuapp.com/api/persons
