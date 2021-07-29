@@ -59,22 +59,12 @@ app.post('/api/persons', (req, res) => {
                 error: 'name must be unique'
             })
         })
-    
-
-    // const person = new Person({
-    //     name: body.name,
-    //     number: body.number,
-    // })
-
-    // person.save().then(person => {
-    //     res.json(person)
-    // })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(p => p.id !== id)
-    res.status(204).end()
+    Person.findByIdAndDelete(req.params.id)
+        .then(result => res.status(204).end())
+        .catch(err => console.log(err))
 })
 
 app.get('/info', (req, res) => {
