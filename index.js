@@ -18,17 +18,15 @@ app.get('/api/persons', (req, res) => {
     })
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     Person.findById(req.params.id)
         .then(person => {
             res.json(person)
         })
-        .catch(err => {
-            res.status(404).end()
-        })
+        .catch(err => next(err))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body
     if(!body.name || !body.number) {
         return res.status(400).json({
@@ -44,27 +42,24 @@ app.post('/api/persons', (req, res) => {
                     number: body.number,
                 })
                 newPerson.save()
-                    .then(person => {
-                        res.json(person)
-                    })
+                    .then(person => res.json(person))
             } else {
                 Person.updateOne({ name: body.name }, {number: body.number })
-                    .then(person => {
-                        res.json(person)
-                    })
+                    .then(person => res.json(person))
             }
         })
         .catch(err => {
-            res.status(400).json({
-                error: 'name must be unique'
-            })
+            next(err)
+            // res.status(400).json({
+            //     error: 'name must be unique'
+            // })
         })
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     Person.findByIdAndDelete(req.params.id)
         .then(result => res.status(204).end())
-        .catch(err => console.log(err))
+        .catch(err => next(err))
 })
 
 app.get('/info', (req, res) => {
@@ -73,6 +68,17 @@ app.get('/info', (req, res) => {
         + '<p>' + new Date() + '</p>'
     )
 })
+
+const errorHandler = (err, req, res, next) => {
+    if (err.name === "CastError") {
+        return res.status(400).send({ error: 'malformatted id' })
+    } else {
+        console.log('##Error##\n', err)
+    }
+    next(err)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT)
