@@ -34,26 +34,30 @@ app.post('/api/persons', (req, res, next) => {
         })
     }
 
+    const newPerson = {
+        name: body.name,
+        number: body.number,
+    }
+
     Person.findOne({ name: body.name })
         .then(person => {
             if(!person) {
-                const newPerson = new Person({
-                    name: body.name,
-                    number: body.number,
-                })
                 newPerson.save()
-                    .then(person => res.json(person))
-            } else {
-                Person.updateOne({ name: body.name }, {number: body.number })
-                    .then(person => res.json(person))
+                    .then(personSaved => res.json(personSaved))
             }
         })
-        .catch(err => {
-            next(err)
-            // res.status(400).json({
-            //     error: 'name must be unique'
-            // })
-        })
+        .catch(err => next(err))
+})
+
+app.put('/api/persons/:id', (req, res, next) => {
+    const newPerson = {
+        name: req.body.name,
+        number: req.body.number,
+    }
+    
+    Person.findByIdAndUpdate(req.params.id, newPerson, { new: true })
+        .then(updatedPerson => res.json(updatedPerson))
+        .catch(err => next(err))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -62,18 +66,23 @@ app.delete('/api/persons/:id', (req, res, next) => {
         .catch(err => next(err))
 })
 
-app.get('/info', (req, res) => {
-    res.send(
-        '<p>Phonebook has info for ' + persons.length + ' people</p>'
-        + '<p>' + new Date() + '</p>'
-    )
+app.get('/info', (req, res, next) => {
+    Person.countDocuments({})
+        .then(docs => {
+            res.send(
+                '<p>Phonebook has info for ' + docs + ' people</p>'
+                + '<p>' + new Date() + '</p>'
+            )
+        })
+        .catch(err => next(err))
+
 })
 
 const errorHandler = (err, req, res, next) => {
     if (err.name === "CastError") {
         return res.status(400).send({ error: 'malformatted id' })
     } else {
-        console.log('##Error##\n', err)
+        console.log(err)
     }
     next(err)
 }
