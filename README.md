@@ -21,3 +21,7 @@ $ npm install cors
 $ npm install mongoose
 
 $ npm install dotenv
+
+## Parte 3D
+
+$ npm install mongoose-unique-validator

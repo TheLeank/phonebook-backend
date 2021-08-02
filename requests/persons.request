@@ -9,8 +9,8 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Mandingo",
-    "number": "30cm"
+    "name": "John Doe",
+    "number": "12345"
 }
 
 ### modify one
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 {
     "name": "John Doe",
-    "number": "2222"
+    "number": "54321"
 }
 
 ### delete one

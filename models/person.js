@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const url = process.env.MONGODB_URI
 console.log('connecting to', url)
@@ -11,10 +12,21 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFind
         console.log('error connecting to MongoDB:', error.message)
     })
 
+// modificar la declaración del schema para introducir validación
 const schema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    number: {
+        type: String,
+        required: true
+    },
 })
+
+// cargar el plugin para poder entender la propiedad unique (imagino)
+schema.plugin(uniqueValidator)
 
 schema.set('toJSON', {
     transform: (document, returnedObject) => {

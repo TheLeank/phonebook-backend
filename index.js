@@ -26,26 +26,17 @@ app.get('/api/persons/:id', (req, res, next) => {
         .catch(err => next(err))
 })
 
+// dado que la validación la hago en el schema, la elimino de aquí, tanto para
+// comprobar si falta alguno de los valores como para comprobar si ya existe un
+// documento con ese nombre
 app.post('/api/persons', (req, res, next) => {
-    const body = req.body
-    if(!body.name || !body.number) {
-        return res.status(400).json({
-            error: 'name or number missing'
-        })
-    }
+    const newPerson = new Person({
+        name: req.body.name,
+        number: req.body.number,
+    })
 
-    const newPerson = {
-        name: body.name,
-        number: body.number,
-    }
-
-    Person.findOne({ name: body.name })
-        .then(person => {
-            if(!person) {
-                newPerson.save()
-                    .then(personSaved => res.json(personSaved))
-            }
-        })
+    newPerson.save()
+        .then(personSaved => res.json(personSaved))
         .catch(err => next(err))
 })
 
