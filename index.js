@@ -26,9 +26,6 @@ app.get('/api/persons/:id', (req, res, next) => {
         .catch(err => next(err))
 })
 
-// dado que la validación la hago en el schema, la elimino de aquí, tanto para
-// comprobar si falta alguno de los valores como para comprobar si ya existe un
-// documento con ese nombre
 app.post('/api/persons', (req, res, next) => {
     const newPerson = new Person({
         name: req.body.name,
@@ -46,9 +43,14 @@ app.put('/api/persons/:id', (req, res, next) => {
         number: req.body.number,
     }
     
-    Person.findByIdAndUpdate(req.params.id, newPerson, { new: true })
-        .then(updatedPerson => res.json(updatedPerson))
-        .catch(err => next(err))
+    Person.findByIdAndUpdate(
+        req.params.id,
+        newPerson,
+        { new: true, runValidators: true }
+    )
+    .then(updatedPerson => res.json(updatedPerson))
+    .catch(err => next(err))
+    
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
