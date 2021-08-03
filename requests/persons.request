@@ -23,4 +23,4 @@ Content-Type: application/json
 }
 
 ### delete one
-DELETE http://localhost:3001/api/persons/610278a1ac4c44aa5e247091
+DELETE http://localhost:3001/api/persons/610923328eb14e9e1b0bacbe
